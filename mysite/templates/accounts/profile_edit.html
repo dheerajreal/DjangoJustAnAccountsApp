@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block content %}
+
+<br>
+<div class="card container col-md-6 mx-auto">
+    <br>
+    <h4 class="card-title">Edit Profile</h4>
+
+    <form class="form-group" action="" method="post">
+        <br> {% csrf_token %} {{form.as_p}}
+
+        <br>
+        <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+
+
+</div>
+
+
+
+
+
+<br> {% endblock %}
