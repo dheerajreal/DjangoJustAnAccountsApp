@@ -1,8 +1,10 @@
 {% extends "base.html" %} {% block content %}
 
 <br>
-<div class="card container col-md-6 mx-auto">
 
+<div class="card container col-md-6 mx-auto">
+    <br>
+    <h4 class="card-title">Login</h4>
     <form class="form-group" action="" method="post">
         <br> {% csrf_token %} {{form.as_p}}
 
@@ -12,8 +14,6 @@
 
 
 </div>
-
-
 
 
 
