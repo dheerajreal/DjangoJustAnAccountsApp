@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegistrationForm, LoginForm
+User = get_user_model()
 
 
 def register(request):
@@ -52,3 +54,24 @@ def logout(request):
     else:
         msg = messages.warning(request, "not logged in")
         return redirect("login")
+
+
+def profile_overview(request):
+    if request.user.is_authenticated:
+        user = request.user
+        user = User.objects.get(username=user)
+    else:
+        msg = messages.warning(request, "not logged in")
+        return redirect("login")
+    context = {
+        "user": user
+    }
+    return render(request, "accounts/profile_overview.html", context)
+
+
+def profile_edit(request):
+    return HttpResponse("edit")
+
+
+def profile_passwd_edit(request):
+    return HttpResponse("passwd")
