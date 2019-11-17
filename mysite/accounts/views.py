@@ -6,10 +6,14 @@ from .forms import RegistrationForm, LoginForm
 
 
 def register(request):
+    if request.user.is_authenticated:
+        msg = messages.success(request, "already logged in")
+        return redirect("index")
     form = RegistrationForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect("index")
+        msg = messages.success(request, "User Created, can login now")
+        return redirect("login")
 
     context = {
         "form": form
@@ -18,6 +22,9 @@ def register(request):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        msg = messages.success(request, "already logged in")
+        return redirect("index")
     form = LoginForm(request.POST or None)
 
     if form.is_valid():
@@ -26,7 +33,10 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
+            msg = messages.success(request, "login success")
             return redirect("index")
+        else:
+            msg = messages.warning(request, "login fail")
 
     context = {
         "form": form
