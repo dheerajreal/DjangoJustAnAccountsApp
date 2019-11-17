@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block content %}
+
+<br>
+<div class="card container col-md-6 mx-auto">
+
+    <form class="form-group" action="" method="post">
+        <br> {% csrf_token %} {{form.as_p}}
+
+        <br>
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+
+
+</div>
+
+
+
+
+
+<br> {% endblock %}
