@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegistrationForm, LoginForm
 
@@ -34,5 +35,10 @@ def login(request):
 
 
 def logout(request):
-    auth_logout(request)
-    return redirect("index")
+    if request.user.is_authenticated:
+        auth_logout(request)
+        msg = messages.success(request, "logout successful")
+        return redirect("login")
+    else:
+        msg = messages.warning(request, "not logged in")
+        return redirect("login")
