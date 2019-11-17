@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
 from .forms import RegistrationForm, LoginForm, ProfileEditForm, PasswordEditForm
 User = get_user_model()
-# TODO : fix password change view
 
 
 def register(request):
@@ -100,11 +99,10 @@ def profile_passwd_edit(request):
     if request.user.is_authenticated:
         user = request.user
         user = User.objects.get(username=user)
-        print(user)
-        form = PasswordEditForm(request.POST or None)
-        print(form)
+        form = PasswordEditForm(request.user, request.POST or None)
         if form.is_valid():
-            print("valid")
+            user = form.save()
+            update_session_auth_hash(request, user)
             msg = messages.success(request, "Successfully updated")
             return redirect("profile_overview")
         context = {
