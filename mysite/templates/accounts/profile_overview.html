@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block content %}
+
+<br>
+<div class="card container col-md-6 mx-auto">
+
+
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <a class="btn-sm btn-primary" href="{% url 'profile_passwd_edit' %}" role="button">Edit Profile</a>
+        <a class="btn-sm btn-primary" href="{% url 'profile_edit' %}" role="button">Change Password</a>
+    </div>
+    <div class="card-header">
+        <h5>Username : @{{user.username}}</h5>
+    </div>
+    <div class="card-header">
+        <h5>Email : {{user.email}}</h5>
+    </div>
+    <div class="card-header">
+        <h5>First Name : {{user.firstname}}</h5>
+    </div>
+    <div class="card-header">
+        <h5>Last Name : {{user.lastname}}</h5>
+    </div>
+
+
+</div>
+
+
+<br> {% endblock %}
