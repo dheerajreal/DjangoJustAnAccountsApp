@@ -27,8 +27,7 @@ def login(request):
     if request.user.is_authenticated:
         msg = messages.success(request, "already logged in")
         return redirect("index")
-    form = LoginForm(request.POST or None)
-
+    form = LoginForm(request, data=request.POST or None)
     if form.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -39,7 +38,8 @@ def login(request):
             return redirect("index")
         else:
             msg = messages.warning(request, "login fail")
-
+    if request.POST and not form.is_valid():
+        msg = messages.warning(request, *form.get_invalid_login_error())
     context = {
         "form": form
     }
@@ -73,11 +73,11 @@ def profile_edit(request):
     if request.user.is_authenticated:
         user = request.user
         user = User.objects.get(username=user)
-        print(user)
+        # print(user)
         form = ProfileEditForm(request.POST or None, instance=user)
-        print(form)
+        # print(form)
         if form.is_valid():
-            print(form)
+            # print(form)
             #user.username = form.cleaned_data["username"]
             #user.email = form.cleaned_data["email"]
             #user.first_name = form.cleaned_data["first_name"]

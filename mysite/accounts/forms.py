@@ -33,7 +33,7 @@ class RegistrationForm(UserCreationForm):
         fields = ["username", "password1", "password2", ]
 
 
-class LoginForm(forms.Form):
+class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username",
                                widget=forms.TextInput(
                                    attrs={
