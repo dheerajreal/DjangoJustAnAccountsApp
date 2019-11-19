@@ -15,12 +15,8 @@
 
     {%include "components/navbar.html" %}
     <!--messages-->
-    <div class=" text-center">
-        {% for message in messages %}
-        <p {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</p>
-        {% empty %}
-        <br> {% endfor %}
-    </div>
+    {% include "components/messages.html"%}
+
     <!--endmessages-->
     <div class="container">
         {% block content %}
