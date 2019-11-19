@@ -6,7 +6,7 @@
     <br>
     <h4 class="card-title">Login</h4>
     <form class="form-group" action="" method="post">
-        <br> {% csrf_token %} {{form.as_p}}
+        <br> {% include "components/form.html"%}
 
         <br>
         <button class="btn btn-primary" type="submit">Login</button>
