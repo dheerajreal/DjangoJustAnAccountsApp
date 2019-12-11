@@ -1,15 +1,20 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, update_session_auth_hash
-from .forms import RegistrationForm, LoginForm, ProfileEditForm, PasswordEditForm
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+
+from .forms import (LoginForm, PasswordEditForm, ProfileEditForm,
+                    RegistrationForm)
+
 User = get_user_model()
 
 
 def register(request):
     if request.user.is_authenticated:
-        msg = messages.success(request, "already logged in")
+        msg = messages.success(request, "Already logged in")
         return redirect("index")
     form = RegistrationForm(request.POST or None)
     if form.is_valid():
@@ -25,7 +30,7 @@ def register(request):
 
 def login(request):
     if request.user.is_authenticated:
-        msg = messages.success(request, "already logged in")
+        msg = messages.success(request, "Already logged in")
         return redirect("index")
     form = LoginForm(request, data=request.POST or None)
     if form.is_valid():
@@ -34,10 +39,10 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            msg = messages.success(request, "login success")
+            msg = messages.success(request, f"Login successful as {username}")
             return redirect("index")
         else:
-            msg = messages.warning(request, "login fail")
+            msg = messages.warning(request, "Login failed")
     if request.POST and not form.is_valid():
         msg = messages.warning(request, *form.get_invalid_login_error())
     context = {
@@ -49,10 +54,10 @@ def login(request):
 def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
-        msg = messages.success(request, "logout successful")
+        msg = messages.success(request, "Logout successful")
         return redirect("login")
     else:
-        msg = messages.warning(request, "not logged in")
+        msg = messages.warning(request, "Not logged in")
         return redirect("login")
 
 
@@ -61,7 +66,7 @@ def profile_overview(request):
         user = request.user
         user = User.objects.get(username=user)
     else:
-        msg = messages.warning(request, "not logged in")
+        msg = messages.warning(request, "Not logged in")
         return redirect("login")
     context = {
         "user": user
@@ -83,19 +88,18 @@ def profile_edit(request):
             #user.first_name = form.cleaned_data["first_name"]
             #user.last_name = form.cleaned_data["last_name"]
             form.save()
-            msg = messages.success(request, "Successfully updated")
+            msg = messages.success(request, "Successfully updated Profile")
             return redirect("profile_overview")
         context = {
             "form": form
         }
         return render(request, "accounts/profile_edit.html", context)
     else:
-        msg = messages.warning(request, "not logged in")
+        msg = messages.warning(request, "Not logged in")
         return redirect("login")
 
 
 def profile_passwd_edit(request):
-   # return HttpResponse("passwd")
     if request.user.is_authenticated:
         user = request.user
         user = User.objects.get(username=user)
@@ -103,12 +107,12 @@ def profile_passwd_edit(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            msg = messages.success(request, "Successfully updated")
+            msg = messages.success(request, "Successfully Changed Password ")
             return redirect("profile_overview")
         context = {
             "form": form
         }
         return render(request, "accounts/password_edit.html", context)
     else:
-        msg = messages.warning(request, "not logged in")
+        msg = messages.warning(request, "Not logged in")
         return redirect("login")
