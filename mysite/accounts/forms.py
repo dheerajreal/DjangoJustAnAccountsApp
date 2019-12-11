@@ -13,6 +13,7 @@ class RegistrationForm(UserCreationForm):
                                )
                                )
     password1 = forms.CharField(label="Password",
+                                help_text="Choose a strong Password",
                                 widget=forms.PasswordInput(
                                     attrs={
                                         "placeholder": "Password", "class": "form-control"
